@@ -1,0 +1,3 @@
+from .BinarySentenceClassificationModule import BinarySentenceClassificationModule
+from .MulticlassSentenceClassificationModule import MulticlassSentenceClassificationModule
+from .MultilabelSentenceClassificationModule import MultilabelSentenceClassificationModule
