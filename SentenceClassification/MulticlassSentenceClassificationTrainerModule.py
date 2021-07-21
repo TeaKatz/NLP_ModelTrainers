@@ -3,10 +3,10 @@ import numpy as np
 from torch.nn import CrossEntropyLoss
 
 from ...Metrics import Metrics
-from ..BaseModule import BaseModule
+from ..BaseTrainerModule import BaseTrainerModule
 
 
-class MulticlassSentenceClassificationModule(BaseModule):
+class MulticlassSentenceClassificationTrainerModule(BaseTrainerModule):
     @staticmethod
     def loss_func(outputs, targets):
         return CrossEntropyLoss()(outputs, targets)

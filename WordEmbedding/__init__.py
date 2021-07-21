@@ -1,3 +1,7 @@
 from .CharacterLevelWordEmbedding import CharacterLevelWordSparse, CharacterLevelWordEmbedding
 from .PositionalCharacterLevelWordEmbedding import PositionalCharacterLevelWordSparse, PositionalCharacterLevelWordEmbedding
 from .WordEmbedding import WordEmbedding
+
+from .SkipgramTrainerModule import SkipgramTrainerModule
+from .CbowTrainerModule import CbowTrainerModule
+from .FastTextTrainerModule import FastTextTrainerModule

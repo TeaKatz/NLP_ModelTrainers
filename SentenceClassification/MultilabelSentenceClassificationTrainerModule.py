@@ -2,10 +2,10 @@ import torch
 from torch.nn import BCEWithLogitsLoss
 
 from ...Metrics import Metrics
-from ..BaseModule import BaseModule
+from ..BaseTrainerModule import BaseTrainerModule
 
 
-class MultilabelSentenceClassificationModule(BaseModule):
+class MultilabelSentenceClassificationTrainerModule(BaseTrainerModule):
     @staticmethod
     def loss_func(outputs, targets):
         return BCEWithLogitsLoss()(outputs, targets)

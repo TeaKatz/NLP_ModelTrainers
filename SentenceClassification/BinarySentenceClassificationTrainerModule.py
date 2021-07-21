@@ -1,12 +1,11 @@
 import torch
-from abc import abstractmethod
 from torch.nn import BCEWithLogitsLoss
 
 from ...Metrics import Metrics
-from ..BaseModule import BaseModule
+from ..BaseTrainerModule import BaseTrainerModule
 
 
-class BinarySentenceClassificationModule(BaseModule):
+class BinarySentenceClassificationTrainerModule(BaseTrainerModule):
     @staticmethod
     def loss_func(outputs, targets):
         return BCEWithLogitsLoss()(outputs, targets)

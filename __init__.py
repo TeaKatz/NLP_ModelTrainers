@@ -4,10 +4,11 @@
 # from .Prachathai import PrachathaiTransformer, PrachathaiVisualCharacterTransformer
 # from .Prachathai import PrachathaiEnsemble
 # from .Prachathai import PrachathaiVisualText, PrachathaiVisualTextAttention
-from .Text2Speech import GoogleTTS
+# from .Text2Speech import GoogleTTS
 # from .InferencePipeline import InferencePipeline
 # from .AmazonReview import AmazonReviewClassificationTask
 
-from .SentenceClassification import BinarySentenceClassificationModule, MulticlassSentenceClassificationModule, MultilabelSentenceClassificationModule
-from .MachineTranslation import MachineTranslationModule
+from .SentenceClassification import BinarySentenceClassificationTrainerModule, MulticlassSentenceClassificationTrainerModule, MultilabelSentenceClassificationTrainerModule
+# from .MachineTranslation import MachineTranslationModule
+from .WordEmbedding import SkipgramTrainerModule, CbowTrainerModule, FastTextTrainerModule
 from .WordEmbedding import WordEmbedding, CharacterLevelWordSparse, CharacterLevelWordEmbedding, PositionalCharacterLevelWordSparse, PositionalCharacterLevelWordEmbedding
