@@ -1,3 +1,3 @@
-from .SkipgramTrainerModule import SkipgramTrainerModule
+from .SkipgramTrainerModule import SkipgramTrainerModule, DualSkipgramTrainerModule
 from .CbowTrainerModule import CbowTrainerModule
 from .FastTextTrainerModule import FastTextTrainerModule
