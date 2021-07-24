@@ -1,3 +1,5 @@
+import torch
+
 from torch.nn import L1Loss, MSELoss, HuberLoss, CosineEmbeddingLoss
 
 from ..BaseTrainerModule import BaseTrainerModule
@@ -16,15 +18,20 @@ class TeacherStudentTrainerModule(BaseTrainerModule):
         return teacher_outputs, student_outputs
 
     def loss_func(self, teacher_outputs, student_outputs):
+        """
+        teacher_outputs: (batch_size, vector_size)
+        student_outputs: (batch_size, vector_size)
+        """
         loss = 0.
         if "mae" in self.loss:
-            pass
+            loss += L1Loss(reduction="sum")(teacher_outputs, student_outputs)
         if "mse" in self.loss:
-            pass
+            loss += MSELoss(reduction="sum")(teacher_outputs, student_outputs)
         if "huber" in self.loss:
-            pass
+            loss += HuberLoss(reduction="sum")(teacher_outputs, student_outputs)
         if "cosine" in self.loss:
-            loss += CosineEmbeddingLoss(reduction="sum")(teacher_outputs, student_outputs, 1)
+            targets = torch.full(teacher_outputs.shape[0], 1)
+            loss += CosineEmbeddingLoss(reduction="sum")(teacher_outputs, student_outputs, targets)
         return loss
 
     def cal_loss(self, outputs, targets):
