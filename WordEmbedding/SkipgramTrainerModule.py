@@ -122,7 +122,6 @@ class VocabFreeSkipgramTrainerModule(BaseTrainerModule):
         negative_outputs = self.word_embedding(negatives)
         return target_outputs, context_outputs, negative_outputs
         
-
     @staticmethod
     def loss_func(outputs, targets):
         return BCEWithLogitsLoss()(outputs, targets)

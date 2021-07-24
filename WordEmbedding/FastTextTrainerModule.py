@@ -55,8 +55,4 @@ class FastTextTrainerModule(BaseTrainerModule):
         return self.loss_func(targets_vec, contexts_vec, negatives_vec)
 
     def cal_metrics(self, outputs, targets=None):
-        """
-        outputs: (batch_size, vocab_size)
-        targets: None
-        """
-        return None
+        pass
