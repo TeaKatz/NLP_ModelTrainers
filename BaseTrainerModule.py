@@ -5,10 +5,6 @@ from pytorch_lightning import LightningModule
 
 class BaseTrainerModule(LightningModule):
     @abstractmethod
-    def __init__(self):
-        pass
-
-    @abstractmethod
     def forward(self):
         pass
 

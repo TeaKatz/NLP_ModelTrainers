@@ -1,2 +1,2 @@
 from .SentenceClassification import BinarySentenceClassificationTrainerModule, MulticlassSentenceClassificationTrainerModule, MultilabelSentenceClassificationTrainerModule
-from .WordEmbedding import SkipgramTrainerModule, DualSkipgramTrainerModule, CbowTrainerModule, FastTextTrainerModule
+from .WordEmbedding import SkipgramTrainerModule, DualSkipgramTrainerModule, CbowTrainerModule, FastTextTrainerModule, TeacherStudentTrainerModule
