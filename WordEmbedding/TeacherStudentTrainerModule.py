@@ -1,5 +1,4 @@
-from torch.nn import L1Loss
-
+from ...Losses import Losses
 from ...Metrics import Metrics
 from ..BaseTrainerModule import BaseTrainerModule
 
@@ -10,36 +9,40 @@ class TeacherStudentTrainerModule(BaseTrainerModule):
         self.teacher = teacher
         self.student = student
 
-    def forward(self, teacher_inputs, student_inputs):
-        teacher_outputs = self.teacher(teacher_inputs)
+    def forward(self, student_inputs, teacher_inputs):
         student_outputs = self.student(student_inputs)
-        return teacher_outputs, student_outputs
+        teacher_outputs = self.teacher(teacher_inputs)
+        return student_outputs, teacher_outputs
 
     @staticmethod
-    def loss_func(teacher_outputs, student_outputs):
+    def loss_func(student_outputs, teacher_outputs):
         """
-        teacher_outputs: (batch_size, vector_size)
         student_outputs: (batch_size, vector_size)
+        teacher_outputs: (batch_size, vector_size)
         """
-        return L1Loss(reduction="sum")(teacher_outputs, student_outputs)
+        return Losses(["MAE"])(teacher_outputs, student_outputs)
 
     @staticmethod
-    def metrics_func(teacher_outputs, student_outputs):
-        return Metrics(["Cosine_Similarity"], names=["Cosine_Similarity"])(teacher_outputs, student_outputs)
+    def metrics_func(student_outputs, teacher_outputs):
+        """
+        student_outputs: (batch_size, vector_size)
+        teacher_outputs: (batch_size, vector_size)
+        """
+        return Metrics(["Cosine_Similarity"])(teacher_outputs, student_outputs)
 
     def cal_loss(self, outputs, targets):
-        teacher_outputs, student_outputs = outputs
+        student_outputs, teacher_outputs = outputs
 
-        teacher_outputs = teacher_outputs.float()
         student_outputs = student_outputs.float()
-        return self.loss_func(teacher_outputs, student_outputs)
+        teacher_outputs = teacher_outputs.float()
+        return self.loss_func(student_outputs, teacher_outputs)
 
     def cal_metrics(self, outputs, targets):
-        teacher_outputs, student_outputs = outputs
+        student_outputs, teacher_outputs = outputs
 
-        teacher_outputs = teacher_outputs.cpu().detach().numpy()
         student_outputs = student_outputs.cpu().detach().numpy()
+        teacher_outputs = teacher_outputs.cpu().detach().numpy()
 
-        teacher_outputs = teacher_outputs.astype(float)
         student_outputs = student_outputs.astype(float)
-        return self.metrics_func(teacher_outputs, student_outputs)
+        teacher_outputs = teacher_outputs.astype(float)
+        return self.metrics_func(student_outputs, teacher_outputs)

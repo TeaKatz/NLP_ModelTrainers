@@ -1,7 +1,8 @@
 import torch
 
-from torch.nn import BCEWithLogitsLoss, Linear
+from torch.nn import Linear
 
+from ...Losses import Losses
 from ...Metrics import Metrics
 from ..BaseTrainerModule import BaseTrainerModule
 
@@ -23,11 +24,11 @@ class SkipgramTrainerModule(BaseTrainerModule):
 
     @staticmethod
     def loss_func(outputs, targets):
-        return BCEWithLogitsLoss()(outputs, targets)
+        return Losses(["BinaryCrossEntropyLoss"])(outputs, targets)
 
     @staticmethod
     def metrics_func(outputs, targets):
-        return Metrics(["MultiLabel-F1", "MultiLabel-Precision", "MultiLabel-Recall"], names=["F1", "Precision", "Recall"], average="micro", zero_division=0)(outputs, targets)
+        return Metrics(["MultiLabel_F1", "MultiLabel_Precision", "MultiLabel_Recall"], names=["F1", "Precision", "Recall"], average="micro", zero_division=0)(outputs, targets)
 
     def cal_loss(self, outputs, targets):
         """
@@ -72,7 +73,7 @@ class DualSkipgramTrainerModule(BaseTrainerModule):
 
     @staticmethod
     def loss_func(outputs, targets):
-        return BCEWithLogitsLoss()(outputs, targets)
+        return Losses(["BinaryCrossEntropyLoss"])(outputs, targets)
 
     @staticmethod
     def regularize_func(vecs1, vecs2):
@@ -124,11 +125,11 @@ class VocabFreeSkipgramTrainerModule(BaseTrainerModule):
         
     @staticmethod
     def loss_func(outputs, targets):
-        return BCEWithLogitsLoss()(outputs, targets)
+        return Losses(["BinaryCrossEntropyLoss"])(outputs, targets)
 
     @staticmethod
     def metrics_func(outputs, targets):
-        return Metrics(["MultiLabel-F1", "MultiLabel-Precision", "MultiLabel-Recall"], names=["F1", "Precision", "Recall"], average="micro", zero_division=0)(outputs, targets)
+        return Metrics(["MultiLabel_F1", "MultiLabel_Precision", "MultiLabel_Recall"], names=["F1", "Precision", "Recall"], average="micro", zero_division=0)(outputs, targets)
 
     def cal_loss(self, outputs, targets):
         """

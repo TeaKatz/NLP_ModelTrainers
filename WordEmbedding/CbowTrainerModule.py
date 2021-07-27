@@ -1,8 +1,9 @@
 import torch
 import numpy as np
 
-from torch.nn import CrossEntropyLoss, Linear
+from torch.nn import Linear
 
+from ...Losses import Losses
 from ...Metrics import Metrics
 from ..BaseTrainerModule import BaseTrainerModule
 
@@ -24,11 +25,11 @@ class CbowTrainerModule(BaseTrainerModule):
 
     @staticmethod
     def loss_func(outputs, targets):
-        return CrossEntropyLoss()(outputs, targets)
+        return Losses(["CategoricalCrossEntropyLoss"])(outputs, targets)
 
     @staticmethod
     def metrics_func(outputs, targets):
-        return Metrics(["F1", "Precision", "Recall"], names=["F1", "Precision", "Recall"], average="micro", zero_division=0)(outputs, targets)
+        return Metrics(["F1", "Precision", "Recall"], average="micro", zero_division=0)(outputs, targets)
 
     def cal_loss(self, outputs, targets):
         """
