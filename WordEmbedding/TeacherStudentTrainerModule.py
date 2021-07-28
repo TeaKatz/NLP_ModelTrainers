@@ -7,6 +7,9 @@ class TeacherStudentTrainerModule(BaseTrainerModule):
     def __init__(self, teacher, student):
         super().__init__()
         self.teacher = teacher
+        for param in self.teacher.parameters():
+            param.requires_grad = False
+            
         self.student = student
 
     def forward(self, student_inputs, teacher_inputs):
@@ -20,7 +23,7 @@ class TeacherStudentTrainerModule(BaseTrainerModule):
         student_outputs: (batch_size, vector_size)
         teacher_outputs: (batch_size, vector_size)
         """
-        return Losses(["MAE"])(teacher_outputs, student_outputs)
+        return Losses(["MAELoss"])(student_outputs, teacher_outputs)
 
     @staticmethod
     def metrics_func(student_outputs, teacher_outputs):
@@ -28,7 +31,7 @@ class TeacherStudentTrainerModule(BaseTrainerModule):
         student_outputs: (batch_size, vector_size)
         teacher_outputs: (batch_size, vector_size)
         """
-        return Metrics(["Cosine_Similarity"])(teacher_outputs, student_outputs)
+        return Metrics(["Cosine_Similarity"])(student_outputs, teacher_outputs)
 
     def cal_loss(self, outputs, targets):
         student_outputs, teacher_outputs = outputs

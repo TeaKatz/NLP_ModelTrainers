@@ -86,4 +86,5 @@ class BaseTrainerModule(LightningModule):
     def get_progress_bar_dict(self):
         items = super().get_progress_bar_dict()
         items.pop("v_num")
+        items.pop("loss")
         return items
