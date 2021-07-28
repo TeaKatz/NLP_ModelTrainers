@@ -1,5 +1,5 @@
-from ...Losses import Losses
-from ...Metrics import Metrics
+from ...NLP_Losses import Losses
+from ...NLP_Metrics import Metrics
 from ..BaseTrainerModule import BaseTrainerModule
 
 
