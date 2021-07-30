@@ -7,4 +7,5 @@ from .WordEmbedding import DualSkipgramTrainerModule
 from .WordEmbedding import CbowTrainerModule
 from .WordEmbedding import FastTextTrainerModule
 from .WordEmbedding import TeacherStudentTrainerModule
+from .WordEmbedding import StudentTrainerModule
 from .WordEmbedding import VectorCosineSimilarityTrainerModule
