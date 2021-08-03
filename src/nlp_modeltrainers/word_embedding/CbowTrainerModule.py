@@ -3,8 +3,8 @@ import numpy as np
 
 from torch.nn import Linear
 
-from NLP_Losses import Losses
-from NLP_Metrics import Metrics
+from nlp_losses import Losses
+from nlp_metrics import Metrics
 from ..BaseTrainerModule import BaseTrainerModule
 
 

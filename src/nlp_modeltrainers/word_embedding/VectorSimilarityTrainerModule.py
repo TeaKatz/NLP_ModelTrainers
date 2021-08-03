@@ -1,6 +1,6 @@
 from torch.nn import CosineSimilarity
 
-from NLP_Losses import Losses
+from nlp_losses import Losses
 from ..BaseTrainerModule import BaseTrainerModule
 
 
