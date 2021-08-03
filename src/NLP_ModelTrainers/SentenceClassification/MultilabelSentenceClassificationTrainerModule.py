@@ -1,11 +1,9 @@
-import numpy as np
-
-from ...NLP_Losses import Losses
-from ...NLP_Metrics import Metrics
+from NLP_Losses import Losses
+from NLP_Metrics import Metrics
 from ..BaseTrainerModule import BaseTrainerModule
 
 
-class MulticlassSentenceClassificationTrainerModule(BaseTrainerModule):
+class MultilabelSentenceClassificationTrainerModule(BaseTrainerModule):
     def __init__(self, model):
         super().__init__()
         self.model = model
@@ -15,15 +13,15 @@ class MulticlassSentenceClassificationTrainerModule(BaseTrainerModule):
 
     @staticmethod
     def loss_func(outputs, targets):
-        return Losses(["CategoricalCrossEntropyLoss"])(outputs, targets)
+        return Losses(["BinaryCrossEntropyLoss"])(outputs, targets)
 
     @staticmethod
     def metrics_func(outputs, targets):
-        return Metrics(["F1", "Precision", "Recall"], average="micro", zero_division=0)(outputs, targets)
+        return Metrics(["MultiLabel_F1", "MultiLabel_Precision", "MultiLabel_Recall"], names=["F1", "Precision", "Recall"], average="micro", zero_division=0)(outputs, targets)
 
     def cal_loss(self, outputs, targets):
         """
-        targets: (batch_size, )
+        targets: (batch_size, class_size)
         outputs: (batch_size, class_size)
         """
         targets = targets.long()
@@ -32,12 +30,12 @@ class MulticlassSentenceClassificationTrainerModule(BaseTrainerModule):
 
     def cal_metrics(self, outputs, targets):
         """
-        targets: (batch_size, )
+        targets: (batch_size, class_size)
         outputs: (batch_size, class_size)
         """
         targets = targets.cpu().detach().numpy()
         outputs = outputs.cpu().detach().numpy()
 
         targets = targets.astype(int)
-        outputs = np.argmax(outputs, axis=-1).astype(int)
+        outputs = (outputs > 0).astype(int)
         return self.metrics_func(outputs, targets)
