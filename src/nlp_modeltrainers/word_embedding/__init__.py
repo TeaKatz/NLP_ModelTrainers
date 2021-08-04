@@ -1,5 +1,6 @@
 from .SkipgramTrainerModule import SkipgramTrainerModule
 from .SkipgramTrainerModule import DualSkipgramTrainerModule
+from .SkipgramTrainerModule import VocabFreeSkipgramTrainerModule
 
 from .CbowTrainerModule import CbowTrainerModule
 

@@ -1,5 +1,7 @@
 import torch
 
+import numpy as np
+
 from torch.nn import Linear
 
 from nlp_losses import Losses
@@ -111,43 +113,71 @@ class VocabFreeSkipgramTrainerModule(BaseTrainerModule):
         self.word_embedding = word_embedding
 
     def forward(self, targets, contexts, negatives):
-        """
-        targets: (*, embedding_dim)
-        contexts: (*, embedding_dim)
-        negatives: (*, negatives_num, embedding_dim)
-        """
         # (batch_size, 1, embedding_dim)
-        target_outputs = self.word_embedding(targets)
-        context_outputs = self.word_embedding(contexts)
+        if isinstance(targets, dict):
+            target_outputs = self.word_embedding(**targets)
+        else:
+            target_outputs = self.word_embedding(targets)
+
+        # (batch_size, 1, embedding_dim)
+        if isinstance(contexts, dict):
+            context_outputs = self.word_embedding(**contexts)
+        else:
+            context_outputs = self.word_embedding(contexts)
+
         # (batch_size, negatives_num, embedding_dim)
-        negative_outputs = self.word_embedding(negatives)
+        if isinstance(negatives, dict):
+            negative_outputs = self.word_embedding(**negatives)
+        else:
+            negative_outputs = self.word_embedding(negatives)
         return target_outputs, context_outputs, negative_outputs
-        
-    @staticmethod
-    def loss_func(outputs, targets):
-        return Losses(["BinaryCrossEntropyLoss"])(outputs, targets)
 
     @staticmethod
-    def metrics_func(outputs, targets):
-        return Metrics(["MultiLabel_F1", "MultiLabel_Precision", "MultiLabel_Recall"], names=["F1", "Precision", "Recall"], average="micro", zero_division=0)(outputs, targets)
+    def loss_func(anchor, positive, negative):
+        return Losses(["TripletLoss"], reduction="sum")([anchor, positive, negative])
 
-    def cal_loss(self, outputs, targets):
-        """
-        outputs: (batch_size, vocab_size)
-        targets: (batch_size, vocab_size)
-        """
-        targets = targets.long()
-        outputs = outputs.float()
-        return self.loss_func(outputs, targets)
+    @staticmethod
+    def metrics_func(anchor, positive, negative):
+        metrics_dict = {}
+        # Positive cosine similarity
+        metrics_dict["Positive_Cosine_Similarity"] = Metrics(["Cosine_Similarity"])(anchor[:, 0], positive[:, 0])["Cosine_Similarity"]
 
-    def cal_metrics(self, outputs, targets):
-        """
-        outputs: (batch_size, vocab_size)
-        targets: (batch_size, vocab_size)
-        """
-        targets = targets.cpu().detach().numpy()
-        outputs = outputs.cpu().detach().numpy()
+        # Negative cosine similarity
+        neg_cosine_sim = []
+        for i in range(negative.shape[1]):
+            neg_cosine_sim.append(Metrics(["Cosine_Similarity"])(anchor[:, 0], negative[:, i])["Cosine_Similarity"])
+        neg_cosine_sim = np.mean(neg_cosine_sim)
+        metrics_dict["Negative_Cosine_Similarity"] = neg_cosine_sim
+        return metrics_dict
 
-        targets = targets.astype(int)
-        outputs = (outputs > 0).astype(int)
-        return self.metrics_func(outputs, targets)
+    def cal_loss(self, outputs, targets=None):
+        """
+        outputs: (target_outputs, context_outputs, negative_outputs)
+        target_outputs: (batch_size, 1, embedding_dim)
+        context_outputs: (batch_size, 1, embedding_dim)
+        negative_outputs: (batch_size, negatives_num, embedding_dim)
+        """
+        target_outputs, context_outputs, negative_outputs = outputs
+
+        target_outputs = target_outputs.float()
+        context_outputs = context_outputs.float()
+        negative_outputs = negative_outputs.float()
+        return self.loss_func(target_outputs, context_outputs, negative_outputs)
+
+    def cal_metrics(self, outputs, targets=None):
+        """
+        outputs: (target_outputs, context_outputs, negative_outputs)
+        target_outputs: (batch_size, 1, embedding_dim)
+        context_outputs: (batch_size, 1, embedding_dim)
+        negative_outputs: (batch_size, negatives_num, embedding_dim)
+        """
+        target_outputs, context_outputs, negative_outputs = outputs
+
+        target_outputs = target_outputs.cpu().detach().numpy()
+        context_outputs = context_outputs.cpu().detach().numpy()
+        negative_outputs = negative_outputs.cpu().detach().numpy()
+
+        target_outputs = target_outputs.astype(float)
+        context_outputs = context_outputs.astype(float)
+        negative_outputs = negative_outputs.astype(float)
+        return self.metrics_func(target_outputs, context_outputs, negative_outputs)
