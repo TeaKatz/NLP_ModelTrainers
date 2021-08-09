@@ -8,5 +8,6 @@ from .FastTextTrainerModule import FastTextTrainerModule
 
 from .TeacherStudentTrainerModule import TeacherStudentTrainerModule
 from .TeacherStudentTrainerModule import StudentTrainerModule
+from .TeacherStudentTrainerModule import StudentWithNegativeSamplesTrainerModule
 
 from .VectorSimilarityTrainerModule import VectorCosineSimilarityTrainerModule
