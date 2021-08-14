@@ -10,4 +10,6 @@ from .TeacherStudentTrainerModule import TeacherStudentTrainerModule
 from .TeacherStudentTrainerModule import StudentTrainerModule
 from .TeacherStudentTrainerModule import StudentWithNegativeSamplesTrainerModule
 
+from .Vector2TokensTrainerModule import Vector2TokensTrainerModule
+
 from .VectorSimilarityTrainerModule import VectorCosineSimilarityTrainerModule
