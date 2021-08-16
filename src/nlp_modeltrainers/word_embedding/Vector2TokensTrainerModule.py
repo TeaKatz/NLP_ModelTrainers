@@ -31,6 +31,7 @@ class Vector2TokensTrainerModule(BaseTrainerModule):
 
     def cal_loss(self, outputs, targets):
         """
+        
         outputs: (batch_size, *, class_size)
         targets: (batch_size, *)
         """
