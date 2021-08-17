@@ -23,11 +23,7 @@ class Vector2TokensTrainerModule(BaseTrainerModule):
 
     @staticmethod
     def loss_func(outputs, targets):
-        return Losses("CategoricalCrossEntropyLoss", ignore_index=-100)(outputs, targets)
-
-    @staticmethod
-    def metrics_func(outputs, targets):
-        return Metrics("F1", average="macro")(outputs, targets)
+        return Losses("CategoricalCrossEntropyLoss", ignore_index=0)(outputs, targets)
 
     def cal_loss(self, outputs, targets):
         """
@@ -44,18 +40,4 @@ class Vector2TokensTrainerModule(BaseTrainerModule):
         return self.loss_func(outputs, targets)
 
     def cal_metrics(self, outputs, targets):
-        """
-        outputs: (batch_size, *, class_size)
-        targets: (batch_size, *)
-        """
-        class_size = outputs.shape[-1]
-
-        outputs = outputs.cpu().detach().numpy()
-        targets = targets.cpu().detach().numpy()
-
-        outputs = outputs.astype(float)
-        targets = targets.astype(int)
-
-        outputs = outputs.reshape([-1, class_size])
-        targets = targets.reshape([-1])
-        return self.metrics_func(outputs, targets)
+        pass
