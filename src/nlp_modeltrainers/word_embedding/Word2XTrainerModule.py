@@ -19,7 +19,7 @@ class BinaryWord2XTrainerModule(BaseTrainerModule):
         targets: (batch_size, *)
         """
         outputs = outputs.float()
-        targets = targets.long()
+        targets = targets.float()
 
         outputs = outputs.view(-1)
         targets = targets.view(-1)
@@ -69,7 +69,7 @@ class MultilabelWord2XTrainerModule(BaseTrainerModule):
         return self.model(*args, **kwargs)
 
     def loss_func(self, outputs, targets):
-        return Losses("CategoricalCrossEntropyLoss", ignore_index=self.ignore_index)(outputs, targets)
+        return Losses("BinaryCrossEntropyLoss", ignore_index=self.ignore_index)(outputs, targets)
 
     def cal_loss(self, outputs, targets):
         """
@@ -79,7 +79,7 @@ class MultilabelWord2XTrainerModule(BaseTrainerModule):
         class_size = outputs.shape[-1]
 
         outputs = outputs.float()
-        targets = targets.long()
+        targets = targets.float()
 
         outputs = outputs.view(-1, class_size)
         targets = targets.view(-1, class_size)
