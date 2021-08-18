@@ -10,6 +10,8 @@ from .TeacherStudentTrainerModule import TeacherStudentTrainerModule
 from .TeacherStudentTrainerModule import StudentTrainerModule
 from .TeacherStudentTrainerModule import StudentWithNegativeSamplesTrainerModule
 
-from .Word2XTrainerModule import Word2XTrainerModule
+from .Word2XTrainerModule import BinaryWord2XTrainerModule
+from .Word2XTrainerModule import MulticlassWord2XTrainerModule
+from .Word2XTrainerModule import MultilabelWord2XTrainerModule
 
 from .VectorSimilarityTrainerModule import VectorCosineSimilarityTrainerModule
