@@ -9,8 +9,8 @@ from ..BaseTrainerModule import BaseTrainerModule
 
 
 class CbowTrainerModule(BaseTrainerModule):
-    def __init__(self, word_embedding, embedding_dim, vocab_size):
-        super().__init__()
+    def __init__(self, word_embedding, embedding_dim, vocab_size, learning_rate=1e-3):
+        super().__init__(learning_rate)
         self.word_embedding = word_embedding
         self.context_classifier = Linear(embedding_dim, vocab_size)
 

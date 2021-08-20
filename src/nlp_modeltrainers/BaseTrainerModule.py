@@ -4,6 +4,10 @@ from pytorch_lightning import LightningModule
 
 
 class BaseTrainerModule(LightningModule):
+    def __init__(self, learning_rate=1e-3):
+        super().__init__()
+        self.learning_rate = learning_rate
+
     @abstractmethod
     def forward(self):
         pass
@@ -80,7 +84,7 @@ class BaseTrainerModule(LightningModule):
         return loss
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
         return optimizer
 
     def get_progress_bar_dict(self):

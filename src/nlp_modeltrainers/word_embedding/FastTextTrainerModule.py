@@ -4,8 +4,8 @@ from ..BaseTrainerModule import BaseTrainerModule
 
 
 class FastTextTrainerModule(BaseTrainerModule):
-    def __init__(self, word_embedding):
-        super().__init__()
+    def __init__(self, word_embedding, learning_rate=1e-3):
+        super().__init__(learning_rate)
         self.word_embedding = word_embedding
 
     def forward(self, targets, contexts, negatives):

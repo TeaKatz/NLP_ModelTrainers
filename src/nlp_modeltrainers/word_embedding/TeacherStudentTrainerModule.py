@@ -6,8 +6,8 @@ from ..BaseTrainerModule import BaseTrainerModule
 
 
 class TeacherStudentTrainerModule(BaseTrainerModule):
-    def __init__(self, teacher, student):
-        super().__init__()
+    def __init__(self, teacher, student, learning_rate=1e-3):
+        super().__init__(learning_rate)
         self.teacher = teacher
         for param in self.teacher.parameters():
             param.requires_grad = False
@@ -54,8 +54,8 @@ class TeacherStudentTrainerModule(BaseTrainerModule):
 
 
 class StudentTrainerModule(BaseTrainerModule):
-    def __init__(self, student):
-        super().__init__()
+    def __init__(self, student, learning_rate=1e-3):
+        super().__init__(learning_rate)
         self.student = student
 
     def forward(self, *args, **kwargs):
@@ -92,8 +92,8 @@ class StudentTrainerModule(BaseTrainerModule):
 
 
 class StudentWithNegativeSamplesTrainerModule(BaseTrainerModule):
-    def __init__(self, student):
-        super().__init__()
+    def __init__(self, student, learning_rate=1e-3):
+        super().__init__(learning_rate)
         self.student = student
 
     def forward(self, *args, **kwargs):

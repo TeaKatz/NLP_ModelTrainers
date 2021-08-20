@@ -10,8 +10,8 @@ from ..BaseTrainerModule import BaseTrainerModule
 
 
 class SkipgramTrainerModule(BaseTrainerModule):
-    def __init__(self, word_embedding, embedding_dim, vocab_size):
-        super().__init__()
+    def __init__(self, word_embedding, embedding_dim, vocab_size, learning_rate=1e-3):
+        super().__init__(learning_rate)
         self.word_embedding = word_embedding
         self.context_classifier = Linear(embedding_dim, vocab_size)
 
@@ -55,8 +55,8 @@ class SkipgramTrainerModule(BaseTrainerModule):
 
 
 class DualSkipgramTrainerModule(BaseTrainerModule):
-    def __init__(self, word_embedding1, word_embedding2, embedding_dim, vocab_size):
-        super().__init__()
+    def __init__(self, word_embedding1, word_embedding2, embedding_dim, vocab_size, learning_rate=1e-3):
+        super().__init__(learning_rate)
         self.word_embedding1 = word_embedding1
         self.word_embedding2 = word_embedding2
         self.context_classifier = Linear(embedding_dim, vocab_size)
@@ -108,8 +108,8 @@ class DualSkipgramTrainerModule(BaseTrainerModule):
 
 
 class VocabFreeSkipgramTrainerModule(BaseTrainerModule):
-    def __init__(self, word_embedding):
-        super().__init__()
+    def __init__(self, word_embedding, learning_rate=1e-3):
+        super().__init__(learning_rate)
         self.word_embedding = word_embedding
 
     def forward(self, targets, contexts, negatives):

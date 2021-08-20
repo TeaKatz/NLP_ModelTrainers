@@ -3,8 +3,8 @@ from ..BaseTrainerModule import BaseTrainerModule
 
 
 class BinaryWord2XTrainerModule(BaseTrainerModule):
-    def __init__(self, model):
-        super().__init__()
+    def __init__(self, model, learning_rate=1e-3):
+        super().__init__(learning_rate)
         self.model = model
 
     def forward(self, *args, **kwargs):
@@ -30,8 +30,8 @@ class BinaryWord2XTrainerModule(BaseTrainerModule):
 
 
 class MulticlassWord2XTrainerModule(BaseTrainerModule):
-    def __init__(self, model, ignore_index=0):
-        super().__init__()
+    def __init__(self, model, ignore_index=0, learning_rate=1e-3):
+        super().__init__(learning_rate)
         self.model = model
         self.ignore_index = ignore_index
 
@@ -60,8 +60,8 @@ class MulticlassWord2XTrainerModule(BaseTrainerModule):
 
 
 class MultilabelWord2XTrainerModule(BaseTrainerModule):
-    def __init__(self, model, ignore_index=0):
-        super().__init__()
+    def __init__(self, model, ignore_index=0, learning_rate=1e-3):
+        super().__init__(learning_rate)
         self.model = model
         self.ignore_index = ignore_index
 
