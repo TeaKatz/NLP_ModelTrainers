@@ -4,8 +4,8 @@ from ..BaseTrainerModule import BaseTrainerModule
 
 
 class BinarySentenceClassificationTrainerModule(BaseTrainerModule):
-    def __init__(self, model):
-        super().__init__()
+    def __init__(self, model, learning_rate=1e-3):
+        super().__init__(learning_rate)
         self.model = model
 
     def forward(self, *args, **kwargs):
