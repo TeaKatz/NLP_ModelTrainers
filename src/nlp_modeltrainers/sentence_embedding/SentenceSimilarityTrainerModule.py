@@ -12,22 +12,17 @@ class SentenceSimilarityTrainerModule(BaseTrainerModule):
         return self.model(*args, **kwargs)
 
     @staticmethod
-    def loss_func(output1, output2, targets):
-        return Losses(["CosineSimilarityLoss"])(output1, output2, targets)
+    def loss_func(outputs, targets):
+        return Losses(["MAELoss"])(outputs, targets)
 
     def cal_loss(self, outputs, targets):
         """
-        outputs: 
-            output1: (batch_size, vector_size)
-            output2: (batch_size, vector_size)
+        outputs: (batch_size, )
         targets: (batch_size, )
         """
-        output1, output2 = outputs
-
-        output1 = output1.float()
-        output2 = output2.float()
+        outputs = outputs.float()
         targets = targets.float()
-        return self.loss_func(output1, output2, targets)
+        return self.loss_func(outputs, targets)
 
     def cal_metrics(self, outputs, targets):
         pass
