@@ -7,6 +7,7 @@ class BaseTrainerModule(LightningModule):
     def __init__(self, learning_rate=1e-3):
         super().__init__()
         self.learning_rate = learning_rate
+        self.save_hyperparameters()
 
     @abstractmethod
     def forward(self):
