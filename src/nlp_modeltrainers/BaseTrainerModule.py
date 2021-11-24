@@ -4,9 +4,20 @@ from pytorch_lightning import LightningModule
 
 
 class BaseTrainerModule(LightningModule):
-    def __init__(self, learning_rate=1e-3):
+    def __init__(self, 
+                learning_rate=1e-3, 
+                optimizer=None, 
+                optimizer_params=None, 
+                lr_scheduler=None, 
+                lr_scheduler_params=None, 
+                lr_scheduler_config=None):
+
         super().__init__()
-        self.learning_rate = learning_rate
+        self.optimizer = torch.optim.Adam if optimizer is None else optimizer
+        self.optimizer_params = {"lr": learning_rate} if optimizer_params is None else optimizer_params
+        self.lr_scheduler = lr_scheduler
+        self.lr_scheduler_params = {} if lr_scheduler_params is None else lr_scheduler_params
+        self.lr_scheduler_config = {} if lr_scheduler_config is None else lr_scheduler_config
         self.save_hyperparameters()
 
     @abstractmethod
@@ -85,8 +96,13 @@ class BaseTrainerModule(LightningModule):
         return loss
 
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=self.learning_rate)
-        return optimizer
+        config = {"optimizer": self.optimizer(self.parameters(), **self.optimizer_params)}
+        if self.lr_scheduler is not None:
+            config["lr_scheduler"] = {
+                "scheduler": self.lr_scheduler(config["optimizer"], **self.lr_scheduler_params),
+                **self.lr_scheduler_config
+            }
+        return config
 
     def get_progress_bar_dict(self):
         items = super().get_progress_bar_dict()

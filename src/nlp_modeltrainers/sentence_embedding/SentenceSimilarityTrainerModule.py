@@ -4,8 +4,8 @@ from ..BaseTrainerModule import BaseTrainerModule
 
 
 class SentenceSimilarityTrainerModule(BaseTrainerModule):
-    def __init__(self, model, learning_rate=1e-3):
-        super().__init__(learning_rate)
+    def __init__(self, model, **kwargs):
+        super().__init__(**kwargs)
         self.model = model
 
     def forward(self, *args, **kwargs):
