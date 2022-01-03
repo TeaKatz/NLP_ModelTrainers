@@ -10,10 +10,15 @@ class QNLITrainerModule(BaseTrainerModule):
     def __init__(self, model, hidden_size, **kwargs):
         super().__init__(**kwargs)
         self.model = model
-        self.classifier = torch.nn.Linear(hidden_size, N_CLASSES)
+        for param in self.model.parameters():
+            param.requires_grad = False
+        self.model.eval()
+        self.classifier = torch.nn.Linear(3 * hidden_size, N_CLASSES)
 
     def forward(self, *args, **kwargs):
-        outputs = self.model(*args, **kwargs)
+        with torch.no_grad():
+            outputs = self.model(*args, **kwargs)
+        outputs = torch.cat((outputs[:, 0], outputs[:, 1], torch.abs(outputs[:, 0] - outputs[:, 1])), dim=-1)
         outputs = self.classifier(outputs)
         return outputs
 

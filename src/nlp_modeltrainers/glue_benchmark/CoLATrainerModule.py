@@ -10,10 +10,14 @@ class CoLATrainerModule(BaseTrainerModule):
     def __init__(self, model, hidden_size, **kwargs):
         super().__init__(**kwargs)
         self.model = model
+        for param in self.model.parameters():
+            param.requires_grad = False
+        self.model.eval()
         self.classifier = torch.nn.Linear(hidden_size, N_CLASSES)
 
     def forward(self, *args, **kwargs):
-        outputs = self.model(*args, **kwargs)
+        with torch.no_grad():
+            outputs = self.model(*args, **kwargs)
         outputs = self.classifier(outputs)
         return outputs
 
