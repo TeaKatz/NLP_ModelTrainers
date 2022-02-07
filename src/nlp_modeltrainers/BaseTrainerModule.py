@@ -41,12 +41,16 @@ class BaseTrainerModule(LightningModule):
 
     def training_step_end(self, batchs):
         # Compute loss and metrics
-        if isinstance(batchs["target"][0], dict):
-            loss = self.cal_loss(batchs["output"], **batchs["target"])
-            metrics = self.cal_metrics(batchs["output"], **batchs["target"])
+        if batchs["target"] is None:
+            loss = self.cal_loss(batchs["output"])
+            metrics = self.cal_metrics(batchs["output"])
         else:
-            loss = self.cal_loss(batchs["output"], batchs["target"])
-            metrics = self.cal_metrics(batchs["output"], batchs["target"])
+            if isinstance(batchs["target"], dict):
+                loss = self.cal_loss(batchs["output"], **batchs["target"])
+                metrics = self.cal_metrics(batchs["output"], **batchs["target"])
+            else:
+                loss = self.cal_loss(batchs["output"], batchs["target"])
+                metrics = self.cal_metrics(batchs["output"], batchs["target"])
 
         # Record loss and metrics
         self.log("train_loss", loss, prog_bar=True, logger=True)
@@ -64,12 +68,16 @@ class BaseTrainerModule(LightningModule):
 
     def validation_step_end(self, batchs):
         # Compute loss and metrics
-        if isinstance(batchs["target"][0], dict):
-            loss = self.cal_loss(batchs["output"], **batchs["target"])
-            metrics = self.cal_metrics(batchs["output"], **batchs["target"])
+        if batchs["target"] is None:
+            loss = self.cal_loss(batchs["output"])
+            metrics = self.cal_metrics(batchs["output"])
         else:
-            loss = self.cal_loss(batchs["output"], batchs["target"])
-            metrics = self.cal_metrics(batchs["output"], batchs["target"])
+            if isinstance(batchs["target"], dict):
+                loss = self.cal_loss(batchs["output"], **batchs["target"])
+                metrics = self.cal_metrics(batchs["output"], **batchs["target"])
+            else:
+                loss = self.cal_loss(batchs["output"], batchs["target"])
+                metrics = self.cal_metrics(batchs["output"], batchs["target"])
 
         # Record loss and metrics
         self.log("val_loss", loss, prog_bar=True, logger=True)
@@ -87,12 +95,16 @@ class BaseTrainerModule(LightningModule):
 
     def test_step_end(self, batchs):
         # Compute loss and metrics
-        if isinstance(batchs["target"][0], dict):
-            loss = self.cal_loss(batchs["output"], **batchs["target"])
-            metrics = self.cal_metrics(batchs["output"], **batchs["target"])
+        if batchs["target"] is None:
+            loss = self.cal_loss(batchs["output"])
+            metrics = self.cal_metrics(batchs["output"])
         else:
-            loss = self.cal_loss(batchs["output"], batchs["target"])
-            metrics = self.cal_metrics(batchs["output"], batchs["target"])
+            if isinstance(batchs["target"], dict):
+                loss = self.cal_loss(batchs["output"], **batchs["target"])
+                metrics = self.cal_metrics(batchs["output"], **batchs["target"])
+            else:
+                loss = self.cal_loss(batchs["output"], batchs["target"])
+                metrics = self.cal_metrics(batchs["output"], batchs["target"])
             
         # Record loss and metrics
         self.log("test_loss", loss, prog_bar=True, logger=False)
