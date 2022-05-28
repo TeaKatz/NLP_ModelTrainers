@@ -53,7 +53,12 @@ class BaseTrainerModule(LightningModule):
                 metrics = self.cal_metrics(batchs["output"], batchs["target"])
 
         # Record loss and metrics
-        self.log("train_loss", loss, prog_bar=True, logger=True)
+        self.log("lr", self.optimizer.param_groups[0]["lr"])
+        if isinstance(loss, dict):
+            for name, value in loss.items():
+                self.log(f"train_{name.lower()}", value, prog_bar=True, logger=True)
+        else:
+            self.log("train_loss", loss, prog_bar=True, logger=True)
         if metrics is not None:
             for name, value in metrics.items():
                 self.log(f"train_{name.lower()}", value, prog_bar=True, logger=True)
@@ -80,7 +85,11 @@ class BaseTrainerModule(LightningModule):
                 metrics = self.cal_metrics(batchs["output"], batchs["target"])
 
         # Record loss and metrics
-        self.log("val_loss", loss, prog_bar=True, logger=True)
+        if isinstance(loss, dict):
+            for name, value in loss.items():
+                self.log(f"val_{name.lower()}", value, prog_bar=True, logger=True)
+        else:
+            self.log("val_loss", loss, prog_bar=True, logger=True)
         if metrics is not None:
             for name, value in metrics.items():
                 self.log(f"val_{name.lower()}", value, prog_bar=True, logger=True)
@@ -107,7 +116,11 @@ class BaseTrainerModule(LightningModule):
                 metrics = self.cal_metrics(batchs["output"], batchs["target"])
             
         # Record loss and metrics
-        self.log("test_loss", loss, prog_bar=True, logger=False)
+        if isinstance(loss, dict):
+            for name, value in loss.items():
+                self.log(f"test_{name.lower()}", value, prog_bar=True, logger=True)
+        else:
+            self.log("test_loss", loss, prog_bar=True, logger=True)
         if metrics is not None:
             for name, value in metrics.items():
                 self.log(f"test_{name.lower()}", value, prog_bar=True, logger=False)
@@ -124,6 +137,6 @@ class BaseTrainerModule(LightningModule):
 
     def get_progress_bar_dict(self):
         items = super().get_progress_bar_dict()
-        items.pop("v_num")
-        items.pop("loss")
+        if "v_num" in items: items.pop("v_num")
+        if "loss" in items: items.pop("loss")
         return items
